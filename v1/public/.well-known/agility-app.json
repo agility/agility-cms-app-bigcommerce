@@ -1,0 +1,39 @@
+{
+	"name": "Agility BigCommerce App v1",
+	"documentationLink": "https://github.com/agility/agility-cms-bigcommerce",
+	"description": "Connect your BigCommerce products with Agility.",
+	"version": "1.0.0",
+	"__sdkVersion": "2.0.0",
+	"configValues": [
+		{
+			"label": "Config Value 1",
+			"name": "configValue1",
+			"type": "string"
+		}
+	],
+	"connections": [
+		{
+			"name": "BigCommerce",
+			"icon": "https://cdn.aglty.io/agility-cms-docs/logos/BigCommerce-logomark-whitebg.svg",
+			"url": "/oauth/bigcommerce"
+		}
+	],
+	"capabilities": {
+
+		"fields": [
+			{
+				"name": "bigcommerce-product",
+				"label": "BigCommerce Product",
+				"description": "A product from your BigCommerce Store."
+			}
+		],
+		"modals": [
+			{
+				"name": "bigcommerce-product-selector",
+				"label": "BigCommerce Product Selector",
+				"description": "Select a product from your BigCommerce Store."
+			}
+		],
+		"installScreen": true
+	}
+}
