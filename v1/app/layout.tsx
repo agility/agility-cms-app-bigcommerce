@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import './globals.css'
+import "@agility/plenum-ui/lib/tailwind.css"
 import { Mulish } from 'next/font/google'
 
 const mulish = Mulish({subsets: ["latin"]})
@@ -16,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
 		<html lang="en">
-			<body className={classNames(mulish.className, "bg-white")}>{children}</body>
+			<body className={classNames("bg-white")}>{children}</body>
 		</html>
 	)
 }

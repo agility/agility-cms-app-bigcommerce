@@ -2,7 +2,7 @@ import { getBigCommerceClient } from "@/lib/bc-auth/auth";
 import { QueryParams } from "@/types/QueryParams";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, response: NextResponse) {
 
 	 const { searchParams } = new URL(request.url);
 
@@ -38,20 +38,24 @@ export async function GET(request: NextRequest) {
 	// }
 
 
+
 	const params: QueryParams = {
 		account_uuid: searchParams.get('account_uuid') || '',
 		code: searchParams.get('code') || '',
-		scope: searchParams.get('scope') || ''
+		scope: searchParams.get('scope') || '',
+		context: searchParams.get('context') || '',
 	}
 
+	console.log("searchParams", searchParams)
 	console.log("params", params)
 
 	const bigcommerce = getBigCommerceClient()
+
 	const session = await bigcommerce.authorize(params)
 	// const contextString = session?.context ?? session?.sub
 	// const context = contextString.split('/')[1] || '';
 
 	console.log("session", session)
 
-	return NextResponse.json({})
+	return NextResponse.json({authorized: true})
 }
