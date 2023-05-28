@@ -29,7 +29,6 @@ export default function useProductDetails({ store, token, entityID }: Props) {
 
 		if (res.ok) {
 			const data = await res.json()
-
 			return data
 		}
 
@@ -38,7 +37,7 @@ export default function useProductDetails({ store, token, entityID }: Props) {
 	})
 
 	return {
-		products: data,
+		productDetail: data,
 		isLoading,
 		error
 	}

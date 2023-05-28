@@ -1,11 +1,8 @@
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { getBigCommerceClient } from "@/lib/bc-auth/auth";
-import { QueryParams } from "@/types/QueryParams";
-import { NextRequest, NextResponse } from "next/server";
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
-export async function POST(request: NextRequest, response: NextResponse) {
-
-	const post = await request.json()
+	const post = JSON.parse(`${request.body}`)
 
 	const store = post.store || ''
 	const token = post.token || ''
@@ -32,12 +29,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
 		const token = await tokenRes.json()
 
 		//cache the gql token for 24 hours
-		return NextResponse
+		response.setHeader('Cache-Control', 's-maxage=86400')
+		return response.status(200)
 			.json(token?.data?.token || { token: null })
-			.headers.set('Cache-Control', 's-maxage=86400');
+
 	} else {
 		throw new Error("Error creating token")
 	}
-
 }
-

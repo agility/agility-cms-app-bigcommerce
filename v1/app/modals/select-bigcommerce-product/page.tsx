@@ -14,8 +14,8 @@ import useSWR from "swr"
 export default function SelectBigCommerceProduct() {
 	const {initializing, appInstallContext} = useAgilityAppSDK()
 
-	const access_token = appInstallContext?.configuration?.access_token || ""
-	const store = `stores/${appInstallContext?.configuration?.store}`
+	const access_token = appInstallContext?.configuration?.accessToken || ""
+	const store = `stores/${appInstallContext?.configuration?.storeHash}`
 
 	if (initializing) {
 		return null
@@ -47,7 +47,7 @@ export default function SelectBigCommerceProduct() {
 					label="OK"
 					onClick={() => {
 						closeModal(null)
-						console.log("OK")
+
 					}}
 				/>
 			</div>

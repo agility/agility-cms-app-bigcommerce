@@ -2,11 +2,11 @@
 import { getGQLClient } from "@/lib/get-gql-client";
 import { gql } from "@apollo/client";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
-	const post = await request.json()
+	const post = JSON.parse(`${request.body}`)
 
 	const storeUrl = post.storeUrl || ''
 	const token = post.token || ''
@@ -41,8 +41,9 @@ export async function POST(request: NextRequest, response: NextResponse) {
 }
 `})
 
-  //cache the product listing for this query for 5 minutes
-  return NextResponse.json(data || { data: null }).headers.set('Cache-Control', 's-maxage=300');
+	//cache the product listing for this query for 5 minutes
+	response.setHeader('Cache-Control', 's-maxage=300')
+	return response.status(200).json(data || { data: null })
 
 
 }

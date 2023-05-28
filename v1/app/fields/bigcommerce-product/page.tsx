@@ -19,12 +19,14 @@ export default function ChooseProductField() {
 	const containerRef = useRef<HTMLIFrameElement>(null)
 	const {initializing, appInstallContext, locale, field, instance, contentItem} = useAgilityAppSDK()
 
-	const access_token = appInstallContext?.configuration?.access_token || ""
-	const store = `stores/${appInstallContext?.configuration?.store}`
+
+
+	const access_token = appInstallContext?.configuration?.accessToken || ""
+	const store = `stores/${appInstallContext?.configuration?.storeHash}`
 
 	const [selectedProduct, onsetSelectedProduct] = useState<Product | null | undefined>(null)
 
-	const {} = useProductDetails({store, token: access_token, entityID: selectedProduct?.entityId})
+	const { productDetail  } = useProductDetails({store, token: access_token, entityID: selectedProduct?.entityId})
 
 	const setSelectedProduct = (product: Product | null | undefined) => {
 		const productJSON = product ? JSON.stringify(product) : ""
@@ -83,6 +85,7 @@ export default function ChooseProductField() {
 
 	if (initializing) return null
 
+	console.log("product", productDetail)
 	return (
 		<div ref={containerRef} id="product-field" className="bg-white">
 			{selectedProduct && (
@@ -92,10 +95,10 @@ export default function ChooseProductField() {
 					</div>
 					<div className="flex-1 flex">
 						<div className="flex-1">
-							<div className="text-lg font-bold">
-								{selectedProduct.name} {selectedProduct.entityId}
-							</div>
+							<div className="text-lg font-bold">{selectedProduct.name}</div>
 							<div className="text-sm text-gray-500">{selectedProduct.description}</div>
+							<div className="text-sm text-gray-500">{productDetail?.inventory?.isInStock && "In Stock"}</div>
+
 						</div>
 
 						<div className="flex justify-end p-1 mb-2">

@@ -6,8 +6,8 @@ interface Props {
 }
 
 const getGraphQLToken = async ({ store, token }: Props) => {
-
-	const res = await fetch("/api/get-graphql-token", {
+	if (! store || ! token) return null
+	const res = await fetch("/api/get-gql-token", {
 		method: "POST",
 		body: JSON.stringify({
 			store,
@@ -24,7 +24,7 @@ const getGraphQLToken = async ({ store, token }: Props) => {
 
 export default function useGraphQLToken({ store, token }: Props) {
 
-	const { data, error, isLoading } = useSWR(`/api/get-graphql-token-${token}-${store}`,
+	const { data, error, isLoading } = useSWR(`/api/get-gql-token-${token}-${store}`,
 		() => getGraphQLToken({ store, token }),
 		{
 			revalidateOnFocus: false,
