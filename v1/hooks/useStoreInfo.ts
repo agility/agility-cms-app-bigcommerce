@@ -8,8 +8,8 @@ interface Props {
 
 export default function useStoreInfo({ store, token }: Props) {
 
-	const { data, error, isLoading } = useSWR(`/api/get-store-info-${token}-${store}`, async () => {
-		const res = await fetch("/api/get-store-info", {
+	const { data, error, isLoading } = useSWR(`/api/get-store-${token}-${store}`, async () => {
+		const res = await fetch("/api/get-store", {
 			method: "POST",
 			body: JSON.stringify({
 				store,

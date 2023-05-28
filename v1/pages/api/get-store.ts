@@ -1,15 +1,16 @@
 
 import { getBigCommerceClient } from "@/lib/bc-auth/auth";
 import { QueryParams } from "@/types/QueryParams";
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
-export async function POST(request: NextRequest, response: NextResponse) {
+	const post = JSON.parse(`${request.body}`)
 
-	const post = await request.json()
 
 	const store = post.store || ''
 	const token = post.token || ''
+	console.log("POST BODY", post, store, token)
 
 	const url = `https://api.bigcommerce.com/${store}/v2/store`
 
@@ -21,14 +22,15 @@ export async function POST(request: NextRequest, response: NextResponse) {
 			'X-Auth-Token': token
 		},
 		//revalidate every 24 hours
-		next: { revalidate: 86400},
+		next: { revalidate: 86400 },
 	})
 
 	if (fetchRes.ok) {
 		const res = await fetchRes.json()
 
-
-		return NextResponse.json(res || { res: null })
+		//Cache the store info for 24 hours
+		response.setHeader('Cache-Control', 's-maxage=86400')
+		return response.status(200).json(res || { res: null })
 	} else {
 		throw new Error("Error getting store info")
 	}

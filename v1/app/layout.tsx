@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-		<html lang="en">
-			<body className={classNames("bg-white")}>{children}</body>
+		<html lang="en" className='h-full bg-white'>
+			<body className={classNames(mulish.className, "bg-white h-full text-black")} >{children}</body>
 		</html>
 	)
 }

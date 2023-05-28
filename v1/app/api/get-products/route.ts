@@ -32,7 +32,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
           plainTextDescription
           path
         defaultImage {
-            url(width:100)
+            url(width:300)
         }
         }
       }
@@ -41,7 +41,8 @@ export async function POST(request: NextRequest, response: NextResponse) {
 }
 `})
 
-	return NextResponse.json(data || { data: null })
+  //cache the product listing for this query for 5 minutes
+  return NextResponse.json(data || { data: null }).headers.set('Cache-Control', 's-maxage=300');
 
 
 }

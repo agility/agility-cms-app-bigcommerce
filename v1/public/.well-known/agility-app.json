@@ -6,12 +6,17 @@
 	"__sdkVersion": "2.0.0",
 	"configValues": [
 		{
-			"label": "Config Value 1",
-			"name": "configValue1",
+			"label": "Access Token",
+			"name": "accessToken",
+			"type": "string"
+		},
+		{
+			"label": "Store Hash",
+			"name": "storeHash",
 			"type": "string"
 		}
 	],
-	"connections": [
+	"connectionsX": [
 		{
 			"name": "BigCommerce",
 			"icon": "https://cdn.aglty.io/agility-cms-docs/logos/BigCommerce-logomark-whitebg.svg",
@@ -34,6 +39,6 @@
 				"description": "Select a product from your BigCommerce Store."
 			}
 		],
-		"installScreen": true
+		"installScreen": false
 	}
 }

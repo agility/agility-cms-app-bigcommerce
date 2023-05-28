@@ -31,7 +31,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
 	if (tokenRes.ok) {
 		const token = await tokenRes.json()
 
-		return NextResponse.json(token?.data?.token || {token: null})
+		//cache the gql token for 24 hours
+		return NextResponse
+			.json(token?.data?.token || { token: null })
+			.headers.set('Cache-Control', 's-maxage=86400');
 	} else {
 		throw new Error("Error creating token")
 	}
