@@ -27,9 +27,11 @@
     "react-dom": "18.2.0",
     "swr": "^2.1.5",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "underscore": "^1.13.6"
   },
   "devDependencies": {
+    "@types/underscore": "^1.11.5",
     "node-bigcommerce": "^4.1.0"
   }
 }

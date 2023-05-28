@@ -1,6 +1,9 @@
 export interface Product {
 	entityId: number
-	imageUrl: string
+	image: {
+		listingUrl: string
+		detailUrl: string
+	}
 	id: string
 	name: string
 	path: string

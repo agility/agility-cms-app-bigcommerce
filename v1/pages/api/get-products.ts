@@ -7,31 +7,60 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
 	const storeUrl = `${request.query.storeUrl}`
+	const cursor = `${request.query.cursor}`
 	const token = (request.headers.authorization || '').replace('Bearer ', '')
-
+	const search = `${request.query.search || ''}`.replaceAll("\"", "")
 	const client = getGQLClient({ storeUrl, token })
+
 	const { data } = await client.query({
 
 		query: gql`{
   site {
-    products {
-      pageInfo {
-        startCursor
-        endCursor
-      }
-      edges {
-        cursor
-        node {
-          entityId
-			 id
-          sku
-          name
-          name
-          plainTextDescription
-          path
-        defaultImage {
-            url(width:300)
-        }
+    search {
+      searchProducts(filters: { searchTerm: "${search}" }) {
+        products (first:10, after: "${cursor}"){
+			 collectionInfo {
+            totalItems
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+          edges {
+				cursor
+            node {
+              entityId
+              id
+              sku
+              name
+              plainTextDescription
+              path
+				  defaultImage {
+                url100wide: url(width: 100)
+                url640wide: url(width: 640)
+              }
+              inventory {
+                isInStock
+                aggregated {
+                  availableToSell
+                  warningLevel
+                }
+              }
+              availabilityV2 {
+                status
+                description
+              }
+				  prices {
+                price {
+                  currencyCode
+                  value
+                }
+              }
+
+            }
+          }
         }
       }
     }

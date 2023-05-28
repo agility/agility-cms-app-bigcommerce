@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 import EmptySection from "@/components/EmptySection"
 import useProductDetails from "@/hooks/useProductDetails"
@@ -12,21 +13,19 @@ import {
 	setVisibility,
 } from "@agility/app-sdk"
 import {Button, ButtonDropDown} from "@agility/plenum-ui"
-import {IconBarcode, IconBuildingStore, IconChevronDown, IconFileBarcode} from "@tabler/icons-react"
+import {IconBan, IconBarcode, IconBuildingStore, IconCheck, IconChevronDown, IconFileBarcode} from "@tabler/icons-react"
 import {useEffect, useRef, useState} from "react"
 
 export default function ChooseProductField() {
 	const containerRef = useRef<HTMLIFrameElement>(null)
 	const {initializing, appInstallContext, locale, field, instance, contentItem} = useAgilityAppSDK()
 
-
-
 	const access_token = appInstallContext?.configuration?.accessToken || ""
 	const store = `stores/${appInstallContext?.configuration?.storeHash}`
 
 	const [selectedProduct, onsetSelectedProduct] = useState<Product | null | undefined>(null)
 
-	const { productDetail  } = useProductDetails({store, token: access_token, entityID: selectedProduct?.entityId})
+	const {productDetail} = useProductDetails({store, token: access_token, entityID: selectedProduct?.entityId})
 
 	const setSelectedProduct = (product: Product | null | undefined) => {
 		const productJSON = product ? JSON.stringify(product) : ""
@@ -85,61 +84,94 @@ export default function ChooseProductField() {
 
 	if (initializing) return null
 
-	console.log("product", productDetail)
 	return (
 		<div ref={containerRef} id="product-field" className="bg-white">
-			{selectedProduct && (
-				<div className="flex">
-					<div className="">
-						<img src={selectedProduct.imageUrl} className="h-72 w-64 rounded" alt={selectedProduct.name} />
-					</div>
-					<div className="flex-1 flex">
-						<div className="flex-1">
-							<div className="text-lg font-bold">{selectedProduct.name}</div>
-							<div className="text-sm text-gray-500">{selectedProduct.description}</div>
-							<div className="text-sm text-gray-500">{productDetail?.inventory?.isInStock && "In Stock"}</div>
-
+			<div className="p-[1px]">
+				{selectedProduct && (
+					<div className="flex border border-gray-200 rounded gap-2">
+						<div className="rounded-l">
+							<img src={selectedProduct.image?.detailUrl} className="h-60 rounded-l" alt={selectedProduct.name} />
 						</div>
-
-						<div className="flex justify-end p-1 mb-2">
-							<div>
-								<ButtonDropDown
-									button={{
-										type: "secondary",
-										size: "base",
-										label: "Browse",
-										icon: "CollectionIcon",
-										onClick: () => selectProduct(),
-									}}
-									dropDown={{
-										items: [
-											[
-												{
-													label: "Remove Product",
-													icon: "TrashIcon",
-													onClick: () => {
-														setSelectedProduct(null)
-													},
-												},
-											],
-										],
-										IconElement: () => <IconChevronDown />,
-									}}
-								/>
+						<div className="flex-1 flex-col p-2 ">
+							<div className="flex gap-2">
+								<div>
+									<div className="text-xl font-medium">{selectedProduct.name}</div>
+									<div className=" text-gray-500 line-clamp-3 break-words">{selectedProduct.description}</div>
+								</div>
+								<div className="flex justify-end p-1 mb-2">
+									<div>
+										<ButtonDropDown
+											button={{
+												type: "secondary",
+												size: "base",
+												label: "Browse",
+												icon: "CollectionIcon",
+												onClick: () => selectProduct(),
+											}}
+											dropDown={{
+												items: [
+													[
+														{
+															label: "Remove Product",
+															icon: "TrashIcon",
+															onClick: () => {
+																setSelectedProduct(null)
+															},
+														},
+													],
+												],
+												IconElement: () => <IconChevronDown />,
+											}}
+										/>
+									</div>
+								</div>
 							</div>
+
+							<div className=" flex justify-between py-2 mt-5 border-b border-b-gray-200 ">
+								<div className="text-gray-500">SKU</div>
+								<div className="">{selectedProduct.sku}</div>
+							</div>
+
+							{productDetail && (
+								<>
+									<div className=" flex justify-between py-2 border-b border-b-gray-200">
+										<div className="text-gray-500">Stock</div>
+										<div className="flex gap-1 items-center">
+											{productDetail?.inventory?.isInStock ? (
+												<div title="In stock">
+													<IconCheck className="h-5 w-5 text-green-500" />
+												</div>
+											) : (
+												<div title="Out of stock">
+													<IconBan className="h-5 w-5 text-red-500" />
+												</div>
+											)}
+											{productDetail.availabilityV2?.status}
+										</div>
+									</div>
+									{productDetail?.prices?.price?.value && (
+										<div className=" flex justify-between py-2 border-b border-b-gray-200 ">
+											<div className="text-gray-500">Price</div>
+											<div className="">
+												${productDetail.prices.price.value} {productDetail.prices.price.currencyCode}
+											</div>
+										</div>
+									)}
+								</>
+							)}
 						</div>
 					</div>
-				</div>
-			)}
+				)}
 
-			{!selectedProduct && (
-				<EmptySection
-					icon={<IconBuildingStore className="text-gray-400 h-12 w-12" stroke={1} />}
-					messageHeading="No Product Selected"
-					messageBody="Select a product to attach it to this item."
-					buttonComponent={<Button type="alternative" onClick={() => selectProduct()} label="Browse Products" />}
-				/>
-			)}
+				{!selectedProduct && (
+					<EmptySection
+						icon={<IconBuildingStore className="text-gray-400 h-12 w-12" stroke={1} />}
+						messageHeading="No Product Selected"
+						messageBody="Select a product to attach it to this item."
+						buttonComponent={<Button type="alternative" onClick={() => selectProduct()} label="Browse Products" />}
+					/>
+				)}
+			</div>
 		</div>
 	)
 }

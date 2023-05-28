@@ -24,30 +24,22 @@ export default function SelectBigCommerceProduct() {
 	//TODO: pull the store and access_token from the appInstallContext
 	return (
 		<div className="h-full flex flex-col">
-			<div className="flex-1">
+			<div className="flex-1 min-h-0">
 				<ProductListing
 					store={store}
 					access_token={access_token}
-					onSelectProduct={(gqlProduct) => {
-						const product: Product = {
-							id: gqlProduct.node.id,
-							path: gqlProduct.node.path,
-							sku: gqlProduct.node.sku,
-							entityId: gqlProduct.node.entityId,
-							imageUrl: gqlProduct.node.defaultImage.url,
-							name: gqlProduct.node.name,
-							description: gqlProduct.node.plainTextDescription,
-						}
+					onSelectProduct={(product) => {
 						closeModal(product)
 					}}
 				/>
 			</div>
-			<div>
+			<div className="flex justify-end p-1">
 				<Button
-					label="OK"
+					type="alternative"
+					label="Cancel"
+					className="w-24"
 					onClick={() => {
 						closeModal(null)
-
 					}}
 				/>
 			</div>

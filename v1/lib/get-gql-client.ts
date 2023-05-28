@@ -41,7 +41,7 @@ export const getGQLClient = ({ storeUrl, token }: Props) => {
 
 	return new ApolloClient({
 		cache,
-		link: from([ headerLink, httpLink, errorLink]),
+		link: from([headerLink, errorLink, httpLink]),
 
 	});
 

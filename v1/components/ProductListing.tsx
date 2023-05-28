@@ -1,55 +1,143 @@
+/* eslint-disable @next/next/no-img-element */
 import useGraphQLToken from "@/hooks/useGraphQLToken"
 import useProductListing from "@/hooks/useProductListing"
 import useStoreInfo from "@/hooks/useStoreInfo"
+import {Button, TextInputAddon} from "@agility/plenum-ui"
+import {useCallback, useState} from "react"
+import {debounce} from "underscore"
+import Loader from "./Loader"
+import ProductRow from "./ProductRow"
+import { Product } from "@/types/Product"
 
 interface Props {
 	store: string
 	access_token: string
-	onSelectProduct: (product: any) => void
+	onSelectProduct: (product: Product) => void
 }
 
-export default function ProductListing({ access_token, store, onSelectProduct }: Props) {
-
+export default function ProductListing({access_token, store, onSelectProduct}: Props) {
 	const {gqlToken} = useGraphQLToken({store, token: access_token})
 	const {storeInfo} = useStoreInfo({store, token: access_token})
 
-	const {isLoading, error, products} = useProductListing({storeUrl: storeInfo?.secure_url, token: gqlToken})
+	const [cursor, setCursor] = useState<string>("")
+	const [filter, setFilter] = useState("")
+	const [filterValueBounced, setfilterValueBounced] = useState<string>("")
+
+	const setfilterValueAndDebounce = (val: string) => {
+		setFilter(val)
+		debouncefilterValue(val)
+	}
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const debouncefilterValue = useCallback(
+		//handle the search change - use debounce to limit how many times per second this is called
+		debounce((value: string) => {
+			//clear out the pagination cursor
+			setCursor("")
+
+			//set the filter
+			setfilterValueBounced(value.toLowerCase())
+		}, 250),
+		[]
+	)
+
+	const {isLoading, error, products} = useProductListing({
+		storeUrl: storeInfo?.secure_url,
+		token: gqlToken,
+		search: filterValueBounced,
+		cursor,
+	})
+
+	const s: Map<number, string> = new Map()
+
+	const totalItems = products?.collectionInfo?.totalItems
+	const pageSize = products?.edges?.length ?? 0
+	const nextPageCursor = products?.pageInfo?.endCursor
+
+	const [pages, setPages] = useState<any[]>([{row: 0, cursor: ""}])
+	const [currentPage, setCurrentPage] = useState(0)
 
 	return (
-		<div className="bg-white">
-			<h2>Select A Product</h2>
+		<div className=" flex flex-col h-full">
+			<div className="flex items-center gap-2">
+				<div className="p-1 flex-1">
+					<TextInputAddon
+						placeholder="Search"
+						type="search"
+						value={filter}
+						onChange={(str) => setfilterValueAndDebounce(str.trim())}
+					/>
+				</div>
+				<div className="text-gray-500 text-sm">
+					Showing {pages[currentPage].row + 1} to {pages[currentPage].row + pageSize} of {totalItems ?? "?"} products
+				</div>
+				<div className="p-1 flex gap-2">
+					<Button
+						type="alternative"
+						title="Previous Page"
+						icon="ChevronLeftIcon"
+						isDisabled={pages.length < 2}
+						onClick={() => {
+							const prevPageCursor = pages[currentPage - 1]?.cursor || ""
+							const newPages = pages.slice(0, -1)
 
-			<div>Store: {storeInfo?.name}</div>
-			<div>
-				Token: <input type="text" value={gqlToken} readOnly />
+							setCurrentPage(currentPage - 1)
+							setPages(newPages)
+							setCursor(prevPageCursor)
+						}}
+					/>
+
+					<Button
+						type="alternative"
+						title="Next Page"
+						icon="ChevronRightIcon"
+						isDisabled={pages[currentPage].row + pageSize >= totalItems}
+						onClick={() => {
+							pages.push({row: pages[currentPage].row + pageSize, cursor: nextPageCursor})
+							setCurrentPage(currentPage + 1)
+							setPages(pages)
+							setCursor(nextPageCursor)
+						}}
+					/>
+				</div>
 			</div>
-
-			{isLoading && <div>Loading...</div>}
+			{isLoading && (
+				<div className="flex flex-col flex-1 h-full justify-center items-center min-h-0">
+					<div className="flex gap-2 items-center text-gray-500">
+						<Loader className="!h-6 !w-6 " />
+						<div>Loading...</div>
+					</div>
+				</div>
+			)}
 			{error && <div>Error? {`${error}`}</div>}
-
-			{products && (
-				<div>
-					Products:
-					<ul className="space-y-2 p-2">
-						{products?.site?.products?.edges?.map((product: any) => (
-							<li key={product.node.entityId}>
-								<button onClick={() => {
-									onSelectProduct(product)
-								}} className="w-full text-left flex justify-start gap-2 items-center rounded bg-gray-200 p-1">
-									<div className="bg-white rounded w-10 h-10 flex-shrink-0">
-										<img src={product.node.defaultImage.url} className="w-10 h-10 rounded" alt={product.node.name} />
-									</div>
-									<div>
-										<div className="line-clamp-1">{product.node.name}</div>
-										<div className="text-sm text-gray-500 line-clamp-1">{product.node.plainTextDescription}</div>
-									</div>
-								</button>
-							</li>
-						))}
-					</ul>
+			{!isLoading && !error && products && (
+				<div className="min-h-0 flex-1 py-4">
+					<div className="scroll-black h-full overflow-y-auto">
+						<ul className="space-y-2 p-2 ">
+							{products?.edges?.map((product: any) => (
+								<li key={product.node.entityId}>
+									<ProductRow
+										node={product.node}
+										product={{
+											id: product.node.id,
+											path: product.node.path,
+											sku: product.node.sku,
+											entityId: product.node.entityId,
+											image: {
+												listingUrl: product.node.defaultImage.url100wide,
+												detailUrl: product.node.defaultImage.url640wide
+											},
+											name: product.node.name,
+											description: product.node.plainTextDescription,
+										}}
+										onSelectProduct={onSelectProduct}
+									/>
+								</li>
+							))}
+						</ul>
+					</div>
 				</div>
 			)}
 		</div>
 	)
-
 }
