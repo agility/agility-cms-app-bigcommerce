@@ -41,7 +41,7 @@ export default function ChooseProductField() {
 				selectedProductID: 1,
 			},
 			callback: (product: Product | null | undefined) => {
-				setSelectedProduct(product)
+				if (product) setSelectedProduct(product)
 			},
 		})
 	}
