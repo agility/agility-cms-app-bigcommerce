@@ -6,10 +6,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
-	const post = JSON.parse(`${request.body}`)
-
-	const storeUrl = post.storeUrl || ''
-	const token = post.token || ''
+	const storeUrl = `${request.query.storeUrl}`
+	const token = (request.headers.authorization || '').replace('Bearer ', '')
 
 	const client = getGQLClient({ storeUrl, token })
 	const { data } = await client.query({

@@ -6,13 +6,14 @@ interface Props {
 }
 
 const getGraphQLToken = async ({ store, token }: Props) => {
-	if (! store || ! token) return null
-	const res = await fetch("/api/get-gql-token", {
-		method: "POST",
-		body: JSON.stringify({
-			store,
-			token
-		})
+	if (!store || !token) return null
+	const res = await fetch(`/api/get-gql-token?store=${encodeURIComponent(store)}`, {
+		method: "GET",
+		headers: {
+			'Accept': 'application/json',
+			'Authorization': 'Bearer ' + token,
+
+		}
 	})
 
 	if (res.ok) {

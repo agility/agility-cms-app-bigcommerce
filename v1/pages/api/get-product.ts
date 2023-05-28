@@ -7,11 +7,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
 
-	const post = JSON.parse(`${request.body}`)
-
-	const storeUrl = post.storeUrl || ''
-	const token = post.token || ''
-	const entityID = post.entityID || ''
+	const storeUrl = `${request.query.storeUrl}`
+	const token = (request.headers.authorization || '').replace('Bearer ', '')
+	const entityID = request.query.entityID || ''
 
 	const client = getGQLClient({ storeUrl, token })
 	const { data } = await client.query({
@@ -105,8 +103,6 @@ fragment MoneyFields on Money {
 
 	//cache the product for 5 minutes
 	response.setHeader('Cache-Control', 's-maxage=300')
-
-
 	return response.status(200).json(data.site?.product || null)
 
 

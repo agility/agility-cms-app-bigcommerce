@@ -2,10 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 
-	const post = JSON.parse(`${request.body}`)
-
-	const store = post.store || ''
-	const token = post.token || ''
+	const store = request.query.store || ''
+	const token = (request.headers.authorization || '').replace('Bearer ', '')
 
 	const url = `https://api.bigcommerce.com/${store}/v3/storefront/api-token`
 

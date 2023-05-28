@@ -12,12 +12,12 @@ export default function useProductListing({ storeUrl, token }: Props) {
 
 		if (!storeUrl || !token) return null
 
-		const res = await fetch("/api/get-products", {
-			method: "POST",
-			body: JSON.stringify({
-				storeUrl,
-				token
-			})
+		const res = await fetch(`/api/get-products?storeUrl=${encodeURIComponent(storeUrl)}`, {
+			method: "GET",
+			headers: {
+				'Accept': 'application/json',
+				'Authorization': 'Bearer ' + token,
+			}
 		})
 
 		if (res.ok) {

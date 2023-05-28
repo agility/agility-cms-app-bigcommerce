@@ -18,13 +18,12 @@ export default function useProductDetails({ store, token, entityID }: Props) {
 
 		if (!storeInfo || !gqlToken || !entityID) return null
 
-		const res = await fetch("/api/get-product", {
-			method: "POST",
-			body: JSON.stringify({
-				storeUrl: storeInfo.secure_url,
-				token: gqlToken,
-				entityID
-			})
+		const res = await fetch(`/api/get-product?storeUrl=${encodeURIComponent(storeInfo.secure_url)}&entityID=${entityID}`, {
+			method: "GET",
+			headers: {
+				'Accept': 'application/json',
+				'Authorization': 'Bearer ' + gqlToken
+			}
 		})
 
 		if (res.ok) {
