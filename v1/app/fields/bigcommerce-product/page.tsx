@@ -89,14 +89,14 @@ export default function ChooseProductField() {
 			<div className="p-[1px]">
 				{selectedProduct && (
 					<div className="flex border border-gray-200 rounded gap-2">
-						<div className="rounded-l">
+						<div className="rounded-l shrink-0">
 							<img src={selectedProduct.image?.detailUrl} className="h-60 rounded-l" alt={selectedProduct.name} />
 						</div>
 						<div className="flex-1 flex-col p-2 ">
 							<div className="flex gap-2">
 								<div>
 									<div className="text-xl font-medium">{selectedProduct.name}</div>
-									<div className=" text-gray-500 line-clamp-3 break-words">{selectedProduct.description}</div>
+									<div className=" text-gray-500 line-clamp-2 break-words">{selectedProduct.description}</div>
 								</div>
 								<div className="flex justify-end p-1 mb-2">
 									<div>
