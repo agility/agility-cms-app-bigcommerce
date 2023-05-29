@@ -7,11 +7,13 @@
 	"configValues": [
 		{
 			"label": "Access Token",
+			"description": "Your BigCommerce Store API Access Token.",
 			"name": "accessToken",
 			"type": "string"
 		},
 		{
 			"label": "Store Hash",
+			"description": "Your BigCommerce Store Hash  (e.g. abcdefg -> https://store-abcdefg.mybigcommerce.com).",
 			"name": "storeHash",
 			"type": "string"
 		}
