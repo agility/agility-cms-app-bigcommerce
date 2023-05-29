@@ -18,7 +18,7 @@ import {useEffect, useRef, useState} from "react"
 
 export default function ChooseProductField() {
 	const containerRef = useRef<HTMLIFrameElement>(null)
-	const {initializing, appInstallContext, locale, field, instance, contentItem} = useAgilityAppSDK()
+	const {initializing, appInstallContext, locale, field, instance, contentItem, fieldValue} = useAgilityAppSDK()
 
 	const access_token = appInstallContext?.configuration?.accessToken || ""
 	const store = `stores/${appInstallContext?.configuration?.storeHash}`
@@ -48,18 +48,21 @@ export default function ChooseProductField() {
 
 	useEffect(() => {
 		//initialize the field value of the product
-		if (!field || !contentItem) return
+		if (!fieldValue) {
+			onsetSelectedProduct(null)
+			return
+		}
 
 		let product: Product | null = null
-		const productJSON = contentItem.values[field.name]
+
 		try {
-			if (productJSON) product = JSON.parse(productJSON)
+			product = JSON.parse(fieldValue)
 		} catch (e) {
 			console.log("Error parsing product JSON.", e)
 		}
 
 		onsetSelectedProduct(product)
-	}, [contentItem, field])
+	}, [fieldValue])
 
 	useEffect(() => {
 		//set the height of the field

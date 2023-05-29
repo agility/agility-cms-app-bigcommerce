@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@agility/app-sdk@^2.0.0-rc18":
-  version "2.0.0-rc18"
-  resolved "https://registry.yarnpkg.com/@agility/app-sdk/-/app-sdk-2.0.0-rc18.tgz#2cad0dc76a86e9a9305e0e9c3e1add420833bb32"
-  integrity sha512-WU6yo/R5UdPXNh4FavlLnMfWRlUNua4BjONgcrlAY7DSI7/UARD6DnYrSwaWXsfcefnUfJVI5byuSf/OauddBw==
+"@agility/app-sdk@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@agility/app-sdk/-/app-sdk-2.0.1.tgz#b8d8e363e3ed9ce7c41680a02d8e981a81adb2bd"
+  integrity sha512-dJ/2f0wS2z6AvOJH47YgZwsuOcMKyPzrZRxnpYQkmb6UNdKPp6kPC2HSoxALtqNdlRJX/QHyfSUF02hexytjwA==
 
 "@agility/plenum-ui@^1.3.42":
   version "1.3.42"
@@ -658,14 +658,9 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-classnames@^2.3.1:
+classnames@^2.3.1, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz"
-  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
-
-classnames@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
 
 client-only@0.0.1, client-only@^0.0.1:
