@@ -1,6 +1,6 @@
 {
 	"name": "Agility BigCommerce App v1",
-	"documentationLink": "https://github.com/agility/agility-cms-app-bigcommerce",
+	"documentationLink": "https://agilitycms.com/docs/apps/bigcommerce",
 	"description": "Connect your BigCommerce products with Agility.",
 	"version": "1.0.0",
 	"__sdkVersion": "2.0.0",
