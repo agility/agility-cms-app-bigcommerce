@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@agility/app-sdk@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@agility/app-sdk/-/app-sdk-2.0.1.tgz#b8d8e363e3ed9ce7c41680a02d8e981a81adb2bd"
-  integrity sha512-dJ/2f0wS2z6AvOJH47YgZwsuOcMKyPzrZRxnpYQkmb6UNdKPp6kPC2HSoxALtqNdlRJX/QHyfSUF02hexytjwA==
+"@agility/app-sdk@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@agility/app-sdk/-/app-sdk-2.0.4.tgz#81d72188f3ac92ffded2a656ff87b48aaff3a1f7"
+  integrity sha512-z+mZgPoWR43W3fpWGaoHIik+754niodfBdgiRWADP0nrWnPF1SL1RD0qeuQ9ynEgEyDPM4fhD0i6o2TZQTC8vQ==
 
 "@agility/plenum-ui@^1.3.42":
   version "1.3.42"

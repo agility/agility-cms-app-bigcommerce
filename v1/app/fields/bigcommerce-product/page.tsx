@@ -2,23 +2,17 @@
 "use client"
 import EmptySection from "@/components/EmptySection"
 import useProductDetails from "@/hooks/useProductDetails"
+
 import {Product} from "@/types/Product"
-import {
-	useAgilityAppSDK,
-	contentItemMethods,
-	setHeight,
-	openModal,
-	useElementHeight,
-	assetsMethods,
-	setVisibility,
-} from "@agility/app-sdk"
+import {useAgilityAppSDK, contentItemMethods, openModal, useResizeHeight} from "@agility/app-sdk"
 import {Button, ButtonDropDown} from "@agility/plenum-ui"
 import {IconBan, IconBarcode, IconBuildingStore, IconCheck, IconChevronDown, IconFileBarcode} from "@tabler/icons-react"
 import {useEffect, useRef, useState} from "react"
 
-export default function ChooseProductField() {
-	const containerRef = useRef<HTMLIFrameElement>(null)
-	const {initializing, appInstallContext, locale, field, instance, contentItem, fieldValue} = useAgilityAppSDK()
+export default function ProductField() {
+	const {initializing, appInstallContext, field, fieldValue} = useAgilityAppSDK()
+
+	const containerRef = useResizeHeight()
 
 	const access_token = appInstallContext?.configuration?.accessToken || ""
 	const store = `stores/${appInstallContext?.configuration?.storeHash}`
@@ -63,22 +57,6 @@ export default function ChooseProductField() {
 
 		onsetSelectedProduct(product)
 	}, [fieldValue])
-
-	useEffect(() => {
-		//set the height of the field
-		if (!containerRef.current) return
-		const mdeSizeElm = document.querySelector<HTMLElement>("#product-field")
-		if (!mdeSizeElm) return
-		const observer = new ResizeObserver((entries) => {
-			const entry = entries[0]
-			if (entry) setHeight({height: entry.contentRect.height})
-		})
-		observer.observe(mdeSizeElm)
-
-		return () => {
-			if (observer) observer.disconnect()
-		}
-	}, [initializing])
 
 	useEffect(() => {
 		//load the product details if we have a product
